@@ -13,15 +13,46 @@ public class HelloWorldTest {
     @Test
     public void RestAssured(){
 
-        Response response = RestAssured
-                .given()
-                .redirects()
-                .follow(false)
-                .when()
-                .get("https://playground.learnqa.ru/api/long_redirect")
-                .andReturn();
 
-        String locationHeader = response.getHeader("location");
-        System.out.println(locationHeader);
+/*        int statusCode = 0;
+        String address = "https://playground.learnqa.ru/api/long_redirect";
+        boolean follow = false;
+        while(statusCode != 200) {
+            Response response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(follow)
+                    .when()
+                    .get(address)
+                    .andReturn();
+
+            statusCode = response.getStatusCode();
+            address = response.getHeader("location");
+            if(statusCode != 200)
+
+            System.out.println(statusCode);
+            System.out.println(address);
+        }*/
+
+        int statusCode = 0;
+        String address = "https://playground.learnqa.ru/api/long_redirect";
+        boolean follow = false;
+        Response response;
+
+        while(statusCode != 200){
+             response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(follow)
+                    .when()
+                    .get(address)
+                    .andReturn();
+
+            statusCode = response.getStatusCode();
+            address = response.getHeader("location");
+        }
+
+        System.out.println("Status code is " + statusCode);
+
     }
 }
