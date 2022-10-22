@@ -13,13 +13,12 @@ public class HelloWorldTest {
     @Test
     public void RestAssured(){
 
-
         JsonPath response = RestAssured
                 .get("https://playground.learnqa.ru/api/get_json_homework")
                 .jsonPath();
 
-
         ArrayList answer = response.get("messages");
         System.out.println(answer.get(1));
+
     }
 }
