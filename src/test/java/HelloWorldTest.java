@@ -11,27 +11,41 @@ import java.util.Map;
 public class HelloWorldTest {
 
     @Test
-    public void RestAssured(){
+    public void RestAssured() throws InterruptedException {
 
-        int statusCode = 0;
-        String address = "https://playground.learnqa.ru/api/long_redirect";
-        boolean follow = false;
-        Response response;
+        JsonPath response = RestAssured
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
 
-        while(statusCode != 200){
-             response = RestAssured
-                    .given()
-                    .redirects()
-                    .follow(follow)
-                    .when()
-                    .get(address)
-                    .andReturn();
+        String token = response.get("token");
 
-            statusCode = response.getStatusCode();
-            address = response.getHeader("location");
-        }
+        response.prettyPrint();
+        System.out.println(token);
 
-        System.out.println("Status code is " + statusCode);
+        response = RestAssured
+                .given()
+                .queryParam("token", token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
 
+        String status = response.get("status");
+        boolean job = status.equals("Job is NOT ready");
+
+        response.prettyPrint();
+        System.out.println(job);
+
+        Thread.sleep(5000);
+
+        response = RestAssured
+                .given()
+                .queryParam("token", token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        //status = response.get("status");
+        //job = status.equals("Job is NOT ready");
+
+        response.prettyPrint();
+        //System.out.println(job);
     }
 }
